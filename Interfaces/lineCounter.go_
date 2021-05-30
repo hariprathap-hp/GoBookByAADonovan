@@ -1,0 +1,26 @@
+package main
+
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+)
+
+type linecounter int
+
+func (lc *linecounter) Write(p []byte) (n int, e error) {
+	cl := bufio.NewScanner(bytes.NewReader(p))
+	cl.Split(bufio.ScanLines)
+	i := 0
+	for cl.Scan() {
+		i++
+	}
+	*lc += linecounter(i)
+	return
+}
+
+func main() {
+	var lc linecounter
+	lc.Write([]byte("My Name is Billa\n, David Billa\n, and I am gonna rule the world!!!"))
+	fmt.Println(lc)
+}

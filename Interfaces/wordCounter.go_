@@ -1,0 +1,26 @@
+package main
+
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+)
+
+type wordcounter int
+
+func (w *wordcounter) Write(p []byte) (n int, e error) {
+	sc := bufio.NewScanner(bytes.NewReader(p))
+	sc.Split(bufio.ScanWords)
+	i := 0
+	for sc.Scan() {
+		i++
+	}
+	*w += wordcounter(i)
+	return
+}
+
+func main() {
+	var w wordcounter
+	w.Write([]byte("My Name is Billa, David Billa"))
+	fmt.Println(w)
+}
