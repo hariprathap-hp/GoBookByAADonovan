@@ -1,0 +1,37 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
+
+func main() {
+	//Open a file and find duplicate lines in the file
+	fp, err := os.Open("example.txt")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//declare a map with string as key and the count of lines as the value
+	countOfLines := make(map[string]int)
+
+	scanner := bufio.NewScanner(fp)
+	//text := " "
+	for scanner.Scan() {
+		text := scanner.Text()
+		countOfLines[text]++
+	}
+	for i, v := range countOfLines {
+		if v > 1 {
+			fmt.Println("The line ", i, " occurs ", v, " times")
+		}
+	}
+
+	b, e := ioutil.ReadFile("example.txt")
+	if e != nil {
+		fmt.Println(e)
+	}
+	fmt.Printf("%v\n", b)
+}

@@ -1,0 +1,48 @@
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+	"sync"
+	"time"
+)
+
+var wg sync.WaitGroup
+
+func main() {
+	curr_time := time.Now()
+	url := "https://www.poetryfoundation.org/poets/robert-frost"
+	for i := 0; i < 2; i++ {
+		wg.Add(1)
+		go fetchAll(url)
+	}
+	wg.Wait()
+	fmt.Printf("Time since start of main function %v\n", time.Since(curr_time))
+}
+
+func fetchAll(url string) {
+	defer wg.Done()
+	curr_time := time.Now()
+	file, f_err := os.OpenFile("cache.txt", os.O_APPEND|os.O_WRONLY, 0644)
+	if f_err != nil {
+		log.Println("Error opening file -- ", f_err)
+		return
+	}
+	result, err := http.Get(url)
+	if err != nil {
+		log.Printf("HTTP get error %v\n", err)
+	}
+
+	defer result.Body.Close()
+	resp, r_err := ioutil.ReadAll(result.Body)
+	if r_err != nil {
+		log.Printf("reading error %v\n", err)
+	}
+
+	file.Write(resp)
+	file.Close()
+	fmt.Printf("Time since start of this function %v\n", time.Since(curr_time))
+}

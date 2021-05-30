@@ -1,0 +1,27 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
+
+func main() {
+	http.HandleFunc("/", default_func)
+	//write http handlefunc
+	http.HandleFunc("/hello", hello)
+	//first create a server that listens to an incoming request from an url and a port
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+
+func hello(rw http.ResponseWriter, req *http.Request) {
+	fmt.Println("Hello")
+	fmt.Fprintf(rw, req.Host, req.Method)
+	fmt.Fprintf(rw, "Hello\n")
+}
+
+func default_func(rw http.ResponseWriter, req *http.Request) {
+	fmt.Println("Default")
+	fmt.Fprintf(rw, req.Host, req.Method, req.URL, req.URL.Path)
+	fmt.Fprintf(rw, "Default\n")
+}

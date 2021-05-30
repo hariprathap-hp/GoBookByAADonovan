@@ -1,0 +1,32 @@
+package main
+
+import (
+	"log"
+	"net/http"
+	"time"
+)
+
+//create a struct timeaHandler which implement Handler
+type timehandler struct {
+	format string
+}
+
+func (th *timehandler) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
+	tm := time.Now().Format(th.format)
+	rw.Write([]byte("The time is: " + tm))
+}
+
+func main() {
+	mux := http.NewServeMux()
+
+	//mux router for time
+	th1123 := &timehandler{format: time.RFC1123}
+	th3339 := &timehandler{format: time.RFC3339}
+
+	//register time Handlers with mux
+	mux.Handle("/time/rfc1123", th1123)
+	mux.Handle("/time/rfc3339", th3339)
+
+	//Listen to incoming requests
+	log.Fatalln(http.ListenAndServe(":8000", mux))
+}

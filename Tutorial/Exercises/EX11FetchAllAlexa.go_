@@ -1,0 +1,38 @@
+//input : go run EX11FetchAllAlexa.go https://www.alexa.com/siteinfo/google.com https://www.alexa.com/siteinfo/youtube.com https://www.alexa.com/siteinfo/tmall.com https://www.alexa.com/siteinfo/qq.com https://www.alexa.com/siteinfo/baidu.com https://www.alexa.com/siteinfo/sohu.com
+
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+	"time"
+)
+
+func main() {
+	main_start := time.Now()
+	//create a channel to the function where the fetch url result will be written
+	u_chan := make(chan bool)
+	for _, v := range os.Args[1:] {
+		go fetchURL(v, u_chan)
+	}
+
+	for i, _ := range os.Args[1:] {
+		fmt.Println(i, <-u_chan)
+	}
+	fmt.Printf("The time after concurrent execution of links from alexa.com %v\n", time.Since(main_start))
+}
+
+func fetchURL(url string, ch chan bool) {
+	func_start := time.Now()
+	_, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error fetching url : ", err)
+		ch <- false
+		return
+	} else {
+		fmt.Printf("Successfully fetched the url %v\n", url)
+		ch <- true
+	}
+	fmt.Printf("Time elapsed after fetchURL function is %v\n", time.Since(func_start))
+}

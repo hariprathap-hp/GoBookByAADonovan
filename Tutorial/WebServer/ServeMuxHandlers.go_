@@ -1,0 +1,30 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
+
+func main() {
+	//mux := http.NewServeMux()
+
+	//Uncomment the below two lines to get NotFoundHandler
+	//mux.Handle("/", http.NotFoundHandler())
+	//http.HandleFunc("/", http.NotFoundHandler().ServeHTTP)
+
+	//Uncomment the below lines to implement rediret handler
+	//declare a redirect handler
+	//rh := http.RedirectHandler("https://www.espncricinfo.com/", 307)
+	//when a call to /cricket comes, call the redirect handler which redirects the url to cricinfo
+	//mux.Handle("/cricket", rh)
+
+	http.HandleFunc("/cricket", handleCricket)
+	//Listen for a request and serve
+	log.Fatalln(http.ListenAndServe(":8080", nil))
+}
+
+func handleCricket(resp http.ResponseWriter, req *http.Request) {
+	fmt.Println("Handling Cricket")
+	http.RedirectHandler("https://www.espncricinfo.com/", 307)
+}

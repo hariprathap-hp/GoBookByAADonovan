@@ -1,0 +1,25 @@
+package main
+
+import (
+	"fmt"
+	"os"
+	"strings"
+	"time"
+)
+
+func main() {
+	s := ""
+	t0 := time.Now()
+	//inefficient version
+	for _, v := range os.Args[1:] {
+		s += v
+	}
+	t1 := time.Now()
+	fmt.Printf("The call took %v to run.\n", t1.Sub(t0))
+
+	//efficient version
+	t3 := time.Now()
+	fmt.Println(strings.Join(os.Args[1:], " "))
+	t4 := time.Now()
+	fmt.Printf("The call took %v to run.\n", t4.Sub(t3))
+}

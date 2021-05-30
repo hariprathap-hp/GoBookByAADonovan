@@ -1,0 +1,23 @@
+package urls
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+
+func main() {
+	my_url := "https://www.york.ac.uk/teaching/cws/wws/webpage1.html"
+	resp, err := http.Get(my_url)
+	if err != nil {
+		log.Fatalf("Error %v while http GET", err)
+	}
+
+	defer resp.Body.Close()
+	body, b_err := ioutil.ReadAll(resp.Body)
+	if b_err != nil {
+		fmt.Println(b_err)
+	}
+	fmt.Printf("%s\n", body)
+}

@@ -1,0 +1,28 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	//create a map with string as key and its count stored
+	counts := make(map[string]int)
+
+	//get input from stdin
+	scanner := bufio.NewScanner(os.Stdin)
+
+	for scanner.Scan() {
+		if scanner.Text() == "end" {
+			break
+		}
+		counts[scanner.Text()]++
+	}
+
+	for i, v := range counts {
+		if v > 1 {
+			fmt.Println(i, " --- ", v)
+		}
+	}
+}

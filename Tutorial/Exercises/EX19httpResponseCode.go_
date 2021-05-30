@@ -1,0 +1,25 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"strings"
+)
+
+func main() {
+	url := "www.york.ac.uk/teaching/cws/wws/webpage1.html"
+
+	if !strings.HasPrefix(url, "https://") {
+		url = strings.Join([]string{"https://", url}, "")
+	}
+
+	resp, r_err := http.Get(url)
+	if r_err != nil {
+		log.Fatalln(r_err)
+	}
+
+	defer resp.Body.Close()
+	//resp_body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%v %v\n", resp.StatusCode, http.StatusText(resp.StatusCode))
+}

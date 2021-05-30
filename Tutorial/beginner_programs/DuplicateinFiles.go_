@@ -1,0 +1,39 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+)
+
+func main() {
+	counts := make(map[string]int)
+	//open a file to read from
+	fp, err := os.Open("example.txt")
+	if err != nil {
+		log.Fatalf("The file didn't open with error %v, and the program exits here.", err)
+	}
+	countLines(fp, counts)
+	countLines(os.Stdin, counts)
+	fp.Close()
+	fmt.Println(counts)
+}
+
+func countLines(f *os.File, c map[string]int) {
+	fileContent := bufio.NewScanner(f)
+	for fileContent.Scan() {
+		if fileContent.Text() != "" {
+			if fileContent.Text() == "end" {
+				break
+			}
+			c[fileContent.Text()]++
+		}
+	}
+
+	for i, v := range c {
+		if v > 1 {
+			fmt.Println(v, " --- ", i)
+		}
+	}
+}
