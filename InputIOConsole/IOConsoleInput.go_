@@ -1,0 +1,38 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
+func main() {
+	//get a reader
+	reader := bufio.NewReader(os.Stdin)
+
+	for {
+		//Use readstring to read string from input
+		str, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		//relace the trailing
+		str = strings.Replace(str, "\n", "", -1)
+
+		if strings.Compare(str, "end") == 0 {
+			fmt.Println("No more inputs will be taken")
+			break
+		}
+
+		//compare yourr string with your string
+		if strings.Compare(str, "Hari") != 0 {
+			fmt.Println("String don't match")
+		} else {
+			fmt.Println("strings match")
+		}
+
+	}
+
+}
