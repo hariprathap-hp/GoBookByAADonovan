@@ -1,0 +1,23 @@
+The Go Prog Language
+--------------------
+Basic Data Types:
+-----------------
+ ->int and int32 are not same even if the compiler is a 32-bit compiler
+	* refer : https://github.com/hariprathap-hp/GoBookByAADonovan/tree/master/
+
+% operator in goLang:
+	->In Go, the sign of the remainder is always the same as the sign of the dividend, so -5%3 and -5%-3 are bot h -2
+	
+ ->What is overflow?
+ 	-> If the result of an arithmetic operation doesn't fit it's source/result type's size, then the result is said to be overflowing
+ 	-> refer : 
+ 	
+ -> What does a len() function return in goLang?
+ 	-> It returns the length of the data structure as signed integer
+ 	-> Why signed integer and not unsigned? Because, if it returns an unsigned integer, the condition like "x > 0" will always be true and it will loop forever
+ 	
+ -> Tricks using fmt.Print statements
+ 	-> refer the code :
+ 	-> Also refer the link : https://faun.pub/golangs-fmt-sprintf-and-printf-demystified-4adf6f9722a2
+ 	
+

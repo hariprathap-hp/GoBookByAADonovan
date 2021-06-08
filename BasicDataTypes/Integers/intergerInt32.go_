@@ -1,0 +1,24 @@
+package main
+
+import "fmt"
+
+func main() {
+	//int and int32 are not same
+	//infact, int 32 is a rune and needs an explicit conversion
+	var x int = 54
+	var y int32 = 54
+
+	fmt.Println(int(y))
+	fmt.Println(x)
+
+	/*if x == y { Gives a compile time error
+		fmt.Println("X and Y are same")
+	}*/
+
+	f := 1e100
+	fmt.Printf("%f\n", f)
+	fmt.Printf("%d\n", int(f))
+
+	h := 16
+	fmt.Printf("%#x\n", h)
+}

@@ -1,0 +1,17 @@
+package main
+
+import "fmt"
+
+func main() {
+	var x uint8 = 255
+	fmt.Println(x, x+1, x*x) //here x+1 becomes 256 and the higher order bits are discarded. It means the extra bits are discarded
+
+	var y int8 = 127
+	fmt.Println(y, y+1, y*y)
+
+	var pos int = 56
+	fmt.Println(^pos)
+
+	var andNot int = 7
+	fmt.Println(andNot &^ 3)
+}
