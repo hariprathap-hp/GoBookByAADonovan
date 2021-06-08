@@ -1,0 +1,16 @@
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println(PopCountClear1(63))
+}
+
+func PopCountClear1(x uint64) int {
+	retval := 0
+	for x > 0 {
+		x = x & (x - 1)
+		retval++
+	}
+	return retval
+}
