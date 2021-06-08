@@ -1,0 +1,3 @@
+package temp
+
+const boilingF = 212.0
