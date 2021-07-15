@@ -1,0 +1,21 @@
+package main
+
+import "fmt"
+
+type Bytecounter int
+
+func (b *Bytecounter) Write(p []byte) (int, error) {
+	*b = Bytecounter(len(p))
+	return int(*b), nil
+}
+
+func main() {
+	var b Bytecounter
+	b.Write([]byte("Hari"))
+	fmt.Println(b)
+
+	b = 0
+	var name = "Denna"
+	fmt.Fprintf(&b, "%s\n", name)
+	fmt.Println(b)
+}

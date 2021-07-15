@@ -20,4 +20,49 @@ Basic Data Types:
  	-> refer the code :
  	-> Also refer the link : https://faun.pub/golangs-fmt-sprintf-and-printf-demystified-4adf6f9722a2
  	
+ -> Runes are printed using "%c and %q" format specifiers
+ 
+Floating point numbers supported by goLang?
+	-> Float32 and Float64
+	
+Maximum float32 - "math.MaxFloat32" -- provides 6 digits of precision
+maximum float64 - "math.MaxFloat64" -- provides 15 digits of precision
 
+	**************************************************************************************************************************
+	
+Section 6 - Methods
+-------------------
+	Do we have objects in Go? YES
+		-> Object is simply a value or variables that has methods
+		-> A method is a function associated with a particular type
+		
+	There is a type Point which is a struct of 2 ints
+		type Point struct {
+			X int
+			Y int
+		}
+	
+		-> Now can we have a method for the type Point with the same name as that of the variable(for example, X?)
+		-> No, because the methods and variables share the same namespace
+		
+Section 6.2
+-----------
+	-> In realistic program, if any method of any type has a pointer receiver, all the methods of that type should have pointer receiver
+	-> But the rule can be broken
+	
+	-> Method declaration are not permitted on types which are pointers themselves
+	-> type P *int
+		-> func (P) f() //compiler error
+		
+	For normal and pointer receiver examples, check the link : https://play.golang.org/p/t3xyJGKGrLH
+	
+	3 Confusing cases:
+		1. 
+		
+	**************************************************************************************************************************
+
+Section 7 : Interfaces
+----------------------
+	
+	
+	**************************************************************************************************************************

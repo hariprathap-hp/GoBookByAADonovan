@@ -1,0 +1,45 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"strings"
+)
+
+type Linecounter int
+type Wordcounter int
+
+func (wc *Wordcounter) Write(p []byte) (int, error) {
+	reader := strings.NewReader(string(p))
+	scanner := bufio.NewScanner(reader)
+	scanner.Split(bufio.ScanWords)
+	for scanner.Scan() {
+		*wc += 1
+	}
+	return int(*wc), nil
+}
+
+func (lc *Linecounter) Write(p []byte) (int, error) {
+	reader := strings.NewReader(string(p))
+	scanner := bufio.NewScanner(reader)
+	scanner.Split(bufio.ScanLines)
+	for scanner.Scan() {
+		*lc += 1
+	}
+	return int(*lc), nil
+}
+
+func main() {
+	var l Linecounter
+	var w Wordcounter
+	shakespeare := `All that glitters is not gold
+	Hell is empty and all the devils are here.
+	Now is the winter of our discontent.`
+	l.Write([]byte(shakespeare))
+	w.Write([]byte(shakespeare))
+	fmt.Println(l)
+	fmt.Println(w)
+	l = 0
+	fmt.Fprintf(&l, "%s\n", shakespeare)
+	fmt.Println(l)
+}
