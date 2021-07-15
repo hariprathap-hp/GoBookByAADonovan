@@ -1,0 +1,896 @@
+GO ENV VARIABLES
+	* https://maelvls.dev/go111module-everywhere/
+
+	############################################################################################################################
+
+Opensource projects in goLang
+	-> https://awesomeopensource.com/projects/golang-package
+	
+How to look for openSource projects?
+	-> You can find an index of the standard library packages at https://golang.org/pkg and the packages contributed by the community at
+https://godoc.org
+
+Howmany ways are there to copy a file in go?
+	https://opensource.com/article/18/6/copying-files-go
+
+handlefunc() in http
+
+What are the initial values for different types in goLang?
+	-> zero value for the type, which is 0 for numbers, false for booleans, "" for strings, and nil for interfaces and reference types (slice, pointer, map, channel, function)
+	-> The zero value of an aggregate type like an array or a struct has the zero value of all of its elements or fields
+
+Can a set of var iables can also be initialize d by cal ling a function that retur ns multiple values?
+	Yes, var f, err = os.Open(name)
+
+More about variable declaration in goLang,
+In the code below, the firs t st atement declares bot h in and err . The secon d de clares out but
+on ly assig ns a value to the exist ing err var iable.
+in, err := os.Open(infile)
+// ...
+out, err := os.Create(outfile)
+
+More,
+A short var iable decl arat ion must declare at least one new var iable, how ever, so this code will
+not compi le:
+f, err := os.Open(infile)
+// ...
+f, err := os.Create(outfile) // compile error: no new variables
+
+The fix is to use an ordinar y assig nment for the secon d st atement.
+
+
+flag package
+-----------
+
+Long time doubt,
+The declarat ion below, in which the Celsius parameter c appears before the function name,
+asso ciates wit h the Celsius type a met hod named String that retur ns c ’s numer ic value
+fo llowe d by °C :
+	func (c Celsius) String() string { return fmt.Sprintf("%g°C", c) }
+	Example : fmt.Println(c.String())
+
+The golang.org/x/tools/cmd/goimports tool, which automatically inserts and remov es packages fro m the imp ort declarat ion as necessary ;
+
+Printf formating
+----------------
+o := 0666
+fmt.Printf("%d %[1]o %#[1]o\n", o) // "438 666 0666"
+x := int64(0xdeadbeef)
+fmt.Printf("%d %[1]x %#[1]x %#[1]X\n", x)
+// Output:
+// 3735928559 deadbeef 0xdeadbeef 0XDEADBEEF
+No te the use of two fmt tr icks. Usu ally a Printf format str ing containing multiple % verbs
+would require the same number of ext ra op erands, but the [1] ‘‘adverbs’’ af ter % te ll Printf to
+us e the firs t op erand over and over again. Secon d, the # adverb for %o or %x or %X te lls Printf
+to emit a 0 or 0x or 0X prefix respectively.
+
+Runes are print ed wit h %c , or wit h %q if quoting is desired:
+ascii := 'a'
+unicode := ' D '
+newline := '\n'
+fmt.Printf("%d %[1]c %[1]q\n", ascii)
+// "97 a 'a'"
+fmt.Printf("%d %[1]c %[1]q\n", unicode) // "22269 D ' D '"
+fmt.Printf("%d %[1]q\n", newline)
+// "10 '\n'"
+
+
+Floating Point representation
+-----------------------------
+%g
+
+var z float64
+	fmt.Println(z, -z, 1/z, -1/z, z/z) //"0 -0 +Inf -Inf NaN"
+
+iota - a constant generator
+---------------------------
+A const de clarat ion may use the constant generat o r iota , which is used to cre ate a sequence
+of rel ate d values wit hout spelling out each one explicitly
+	--> It is equivlent to enumeration
+	
+	#########################################################################################################################
+	
+Section 3.4
+Boolean Types:
+--------------
+	-> How to convert boolean to integer?
+		-> btoi(boolean value)
+		
+	-> func itob(integer)
+	
+Section 3.5
+Strings:
+--------
+	-> s[i:j] - gives a new substring from i-th char to j-th character
+	-> A string(s) and its substring(s[i:j]) share the same underlying byte array
+	
+	Escape Sequences:
+		-> Not allowed in raw string literals `Hari`
+		-> Allowed in string literals "Hari"
+		
+		-> Raw string literals are useful for HTML templates, JSON literals, command usage messages, and the like, which often extend over multiple lines
+		
+What is a Rune?
+----------------
+	* It is standard number called "Unicode Code point"
+	* It is unique for any character in any of the world's writing systems
+	* Natural data type to hold a single rune is "int32"
+	
+What is UTF-8?
+	* UTF-8 is a variable-length encoding of Unicode code points as bytes
+	
+Library string functions:
+	* HasPrefix, HasSuffix, Contains
+			p := "harryHariPrathap"
+			fmt.Println(strings.HasPrefix(p, "harry"))
+			fmt.Println(strings.Contains(p, "Hari"))
+			
+	*strings.LastIndex(s,"/")
+		* Provides the location(index) of the last occurrence of hte character "/"
+		p := "harryHariPrathap.go"
+		i := strings.LastIndex(p, ".")
+		si := p[:i]
+		fmt.Println(si)
+		
+Other strings and bytes function:
+	-> Contains(s, substr string) bool
+	-> Count(s, sep string) int
+	-> Fields(s string) []string
+	-> HasPrefix(s, prefix string) bool
+	-> Index(s, sep string) int
+	-> Join(a []string, sep string) string
+	
+	Refer the link for examples: https://play.golang.org/p/9y7_9aQqseD
+	
+Difference between bytes.WriteByte and bytes.WriteRune?
+	-> For ASCII characters, use bytes.WriteByte
+	-> For any other arbitrary rune, use bytes.WriteRune
+	
+Start from exercise 3.10 (July 6 2021)
+	
+	#########################################################################################################################
+
+Composite Types
+---------------
+	-> Both arrays and structs are fixed size. In contrast, slices and maps are dynamic data structures that grow as values are added
+	
+	#########################################################################################################################
+General info on GoLang
+	
+String parameter to integer conversion
+
+hari@hari-Vostro-3550:~/go/src/The_Go_Prog_Language/Tutorial$ go doc strconv.Atoi
+package strconv // import "strconv"
+
+func Atoi(s string) (int, error)
+    Atoi is equivalent to ParseInt(s, 10, 0), converted to type int.
+    
+Trivia : Howmany keywords are there in goLang?
+	25
+	
+First Letter Upper Case names in Go?
+	-> Such names are exported and visible across packages
+	-> One such example is "Printf"
+	
+What are the 4 Major kinds of declarations in Go?
+	-> var, const, type, func
+
+How to check if command line arguments are passed in goLang?
+	-> https://play.golang.org/p/jTpLE9uIMiq
+	
+How the go compiler compiles the files in goLang?
+	-> If the package has multiple .go files, they are initialized in the order in which the files are given to the compiler ; the go tool sorts .go files by name before invoking the compiler
+	
+
+	
+	#########################################################################################################################
+	
+Scanner in Go:
+	-> Scanner takes io.Reader as an argument and retuns "scanner"
+	-> Scanner.scan() scans the input from Reader until the next token (usually newline) and returns true or false
+	-> If the token is present, get the value read from the scanner using scanner.Text()
+	
+	#########################################################################################################################
+
+Arrays
+------
+	-> Fixed length sequence of zero or more elements of a particular type
+	-> Arrays are rarely used in Go due to their fixed length
+
+	-> Slices are used as substitutes for Arrays
+	-> var a [3] is an array declaration
+
+	-> [3]int and [4]int are different types; cannot assign [4]int to [3]int
+
+Slices
+------
+	-> []rune("Hello, BF ") : This statement creates a slice
+	-> slice append x := [] int {1,2,3}
+	x = append(x, 4,5,6}
+	
+	s3 := []int{20, 21, 22, 23}
+	s2 = append(s2, s3...) //The variadic parameter(...) is important
+	
+	slice creation using make
+	--------------------------
+	sl := make([]string, 10, 100) -> slice type, length and capacity
+	
+Multi-Dimensional-Slice
+-----------------------
+	ab := []string {...,...}
+	bb := []string {...,...}
+	
+	cb := [][]string{ab,bb}
+	
+	#############################################################################################################################
+
+Maps in goLang
+--------------
+Refer : https://play.golang.org/p/4rZZ_bOH62f
+	mp := map[string]int {
+		"James" : 32,
+		"Hari" : 31,
+	}
+	
+	Refer all Ninja 4 Exercises in vc code
+	
+	deleting a record from a map
+		delete(mp,"Prathap_Hari")
+		
+	adding a record to a map,
+		mp["Hermoine"] = []string{"Ron Weasley", "Spells", "Harry Potter"}
+		
+	A map with string as a key and slice of strings as values,
+		mp := map [string][]string
+		
+	#############################################################################################################################
+	
+fmt.Sprintf()
+	-> Sprintf formats according to a format specifier and returns the resulting string. 
+	-> func k(list []string) string { return fmt.Sprintf("%q", list) } is the example which converts a slice into a string
+
+json.Marshaling
+---------------
+	-> Converting a Go datastructures to JSON format is called marshaling
+	-> Marshaling done by json.Marshal
+
+	-> Only exported fields are marshaled. It means that all the field names must start in capital letters.
+	-> No error will be thrown if the fields don't start in capital letters. Just they won't be exported
+
+Empty Interface in goLang
+	-> https://tour.golang.org/methods/14
+	
+Reference passing,
+	-> point er, slice, map, function, or channel
+	
+Remember what is bare return in go
+	-> They are sparingly used as they are difficult to understand
+	
+What is a nil function?
+	-> var f func(int) int
+	
+What happens when you call a nil function?
+	-> fmt.Println(f) //It causes panic "panic: runtime error: invalid memory address or nil pointer dereference"
+	
+What is the use of strings.Map function? Refer book for simple example,
+	-> strings.Map applies a function to each character of a string , joining the results to make another string
+	-> func add1(r rune) rune { return r + 1 }
+	-> fmt.Println(strings.Map(add1, "HAL-9000")) // This calls the add1 function on each character of the input string passed
+	
+What is a technique called closures?
+
+	---------------------------------------------------------------------------------------------------------------------
+	
+goRoutines and channels
+-----------------------
+What are the two types of concurrent programming?
+	-> Communicating Sequential Processes : Here values are passed between independent activities (goroutines) but variables are for
+the most part confined to a single activity
+	-> Shared memory multithreading
+	
+What is a goroutine in Go?
+	-> In Go, each concurrently executing activity is called a goroutine
+	
+Main goroutine?
+	-> When a program starts, its only goroutine is the one that calls the main function
+	
+New goroutines?
+	-> New goroutines are created by Go statement
+	-> Go statement causes the function to be called in a newly created goRoutine
+
+How to stop a goRoutine(basic)?
+	-> By returning from main or exiting the program
+	
+	---------------------------------------------------------------------------------------------------------------------
+	
+net package
+-----------
+For reference : https://www.linode.com/docs/guides/developing-udp-and-tcp-clients-and-servers-in-go/
+	Dial Function : The Dial function connects to a server
+		-> conn, err := net.Dial("tcp", "golang.org:80")
+		-> Dial function is a goLang version of netcat(nc)
+		
+	Listen Function : The listen function creates a listener which listens for incoming connections on a network port, in this case which is 8000	
+		-> ln, err := net.Listen("tcp", ":8000")
+	Accept Function : The listener’s Accept method blocks until an incoming connection request is made, then returns a net.Conn object rep-
+resenting the connection
+	
+	---------------------------------------------------------------------------------------------------------------------
+	
+channels
+	-> unbuffered channels causes sending and receiving goroutines to synchronize. Hence, they are called as synchronous channels
+	
+	#############################################################################################################################
+	
+Variadic Parameters:
+	Refer Introduction to packages video of GoLang tutorial
+	Basics of empty interfaces
+	
+	
+Types of Declarations in goLang - 3 Types
+	1. Short Declaration -> x := 42 [doesn't work outside the scope of main function] ; Refer the prog variable declarations
+	2. var x = 43 [Using var keyword work even outside the scope of main function]
+	3. var b int; b = 44 [default initialization is 0]
+	
+	Refer : variable_declaration_types.go
+	
+	#############################################################################################################################
+	
+Variabe string:
+	String variables are immutable
+	Length of a string using "len()"
+	
+	Raw string literals : `fooo`
+	Interpreted string literals : "foo"
+	
+	Allowed:
+	a := `Captain said, 
+	"Titanic is not sinking"`
+	fmt.Println(a)
+
+	Not Allowed:
+	b := "Captain said, \"Titanic is not sinking\""
+	
+	string to slice of bytes using -> []byte(s)
+	
+	To print utf-8 code point : %#U
+	
+Constants:
+	group of contant variables declaration,
+	1. Untyped constants
+		const (
+			a := 4
+			b := 24.24
+		      )
+	2. Typed constants
+		const (
+			a int := 4
+			b float64 := 24.24
+		      )
+
+Iota:
+	const (
+		a = iota //declares the variable to 0 and assigns the value for the following variables incremented by 1
+	)
+	
+	#############################################################################################################################
+
+Control Flow (Udemy)
+	No "while loop" and "do while" in goLang
+	
+	"For" is the only looping statement in goLang
+	
+	for statement with single condition [like a while loop]
+		for i < 10 {
+			..
+			i++
+		}
+	
+	for k,v := range [slice] {
+	}
+	
+break and continue
+Two conditions in if statement
+	if x := 42; x > 0 {
+	}
+
+Switch statement
+	switch {
+		case 1:
+			...
+		case 2:
+			...
+	}	
+	
+	"fallthrough" keyword
+		* when fallthrough keyword is used, whatever the next is executed even if the case condition is false and also prints "default" statements
+		
+	default:
+		<statement>
+		
+	switch "Bond" {
+		case "James":
+			...
+		case "Bond":
+			... // This prints
+			
+		case "Money", "Penny", "Bond":
+			... //Also this works
+			
+	Refer the video again
+	}
+	
+	* The switch statement doesn't need an argument; This form is called as tagless switch which is equivalent to "switch true"
+	
+	* Labelled break statement, Continue statement, goto statement - know about all these
+	
+	#############################################################################################################################
+	
+Slices in goLang
+	var s []int
+	fmt.Printf("%T\n", s)
+
+	s1 := make([]int, 10, 15)
+	fmt.Printf("%T\n", s1)
+	fmt.Println(cap(s1))
+	
+	#############################################################################################################################
+	
+Zero Value:
+	booleans : false
+	Integers : 0
+	Floats : 0
+	Strings : ""
+	pointers, slices, functions, interfaces, channels, maps : nil
+	
+Format specifier
+	%t : True or False
+	%b : binary
+	%x : Hexadecimal
+	%#x : Hex with 0x before
+	
+Prints:
+	print, printf, println [prints output to console]
+	Sprint, Sprintf, Sprintln [returns a string and the string can be saved]
+	Fprint, Fprintf, Fprintln [Prints an output to a file]
+	
+Creating our own types in Go:
+	type hotdog int
+	var a hotdog : Variable "a" is of typehotdog which in turn is type "int"
+	
+There is no casting in Go, only type conversions are there
+
+Difference between "type_casting" and "type_conversion"
+	https://www.geeksforgeeks.org/difference-between-type-casting-and-type-conversion/	#:~:text=In%20type%20casting%2C%20a%20data,data%20type%20by%20a%20compiler.&text=Type%20casting%20can%20be%20applied,well%20as%20incompatible%20data%20types.
+	
+	
+byte is an alias for uint8
+rune is an alias for int32
+
+	############################################################################################################################
+	
+What is substitutability in goLang?
+	*This fre e dom to substitute one typ e for another that sat isfies the same int erface is cal le d substitutability
+	*Basically it is related to interface
+	
+bytes.Buffer in golang
+	* https://play.golang.org/p/MqoHaYz-1a-
+	
+	############################################################################################################################
+	
+structs:
+	*Intro :  https://play.golang.org/p/DUyPS8qKFsG
+	https://play.golang.org/p/IFqrR3HV_W1
+	* Anonymous struct : https://play.golang.org/p/ERyLsHhtDL5
+
+	Is go Object Oriented? Refer "HouseKeeping" video under "structs section
+	
+Const in goLang : https://play.golang.org/p/i6ePEoW_e0S
+
+Handson 1 : https://play.golang.org/p/u__atbQGucW
+Handson 2 : https://play.golang.org/p/0el6CJdQiA3
+Handson 3 : https://play.golang.org/p/2568l5GQ4fp -- embeddded structs
+Handson 4 : https://play.golang.org/p/nHRLMNku7Oi -- anonymous struct with map and slice
+
+	############################################################################################################################
+	
+Functions:
+	Sprint usage : https://play.golang.org/p/yJ4KJDlNx7G
+		* don't use format specifier as it is just Sprint and not Sprintf
+		
+	Variadic parameters in functions
+		* https://play.golang.org/p/K0_zjBk8cNK
+		
+	Unfurling a slice/ passing 0 to a variadic function parameter
+		* https://play.golang.org/p/sHE2qOVb3mK
+		
+	Defer in goLang:
+		* https://play.golang.org/p/2neKq2_8F2j
+	
+	Methods in goLang:
+		* https://play.golang.org/p/Un8BiYDUyfZ
+		
+	Interfaces and Polymorphism:
+		* How interfaces help to achieve polymorphism
+		* https://play.golang.org/p/GS7Ff8Qlqag
+		
+		* Empty interface
+			* https://play.golang.org/p/9dPtt5Y-_-8
+			
+		Writer Interface in goLang
+			* type Writer interface {
+			    Write(p []byte) (n int, err error)
+			}
+			
+		Must refer; book exercise 7.2
+			* https://play.golang.org/p/m0Y8dnI9tKO 
+			* Run the above in VS Code
+			
+	Anonymous functions:
+		https://play.golang.org/p/8N97QBZkVzv
+		
+	Function Expression:
+		https://play.golang.org/p/J0ZvNB-bd2R
+		
+	Returning a function from function:
+		https://play.golang.org/p/50_41OdJYQY
+		
+	Callback:
+		Passing functions as argument : https://play.golang.org/p/j6IXDY_6H2
+		https://play.golang.org/p/zLJtgQlpm3R
+		
+	Closure:
+		Useful info. Check the video once	
+		
+	Recursion:
+		* factorial using recursion and using loop
+			* https://play.golang.org/p/GKU-acbBuuv	
+			
+	Handson Exercises:
+		1. https://play.golang.org/p/M2OblvNGFkE
+		2. https://play.golang.org/p/O1C1ooAzSF8 
+		3. https://play.golang.org/p/HjAyZTrBUQT [defer]
+		4. https://play.golang.org/p/ooJ3Gus7jYP [methods]
+		5. https://play.golang.org/p/C9XzX17jYGc [interfaces, methods, math.Pi and important code]
+		6. https://play.golang.org/p/-tgj3sUwFfH; Anonymous function
+		7. https://play.golang.org/p/12arPdYmd4Z;  assigning an anonymous func to a function variable of same type
+		8. https://play.golang.org/p/Q8Q6F0IqU1b; function returning function
+		9. https://play.golang.org/p/vsNdaNA64vF; passing a function to another function as argument
+		10.https://play.golang.org/p/vHfw8GVSe_1; closure
+	
+	############################################################################################################################
+
+Pointers:
+	* Refer https://play.golang.org/p/EM5vYyozaQA for basics
+	* Everything in goLang is "pass by Value"
+	* How to use pointers in functions : https://play.golang.org/p/gPJ7AgiRu3l
+	* Method Sets: Types : with pointer receiver and non-pointer receiver
+	
+	Hands-on Exercises:
+		1. Leave it
+		2. https://play.golang.org/p/7EB1AMHhbzn
+	
+	############################################################################################################################
+
+Applications:
+	Json : Refer "https://golang.org/pkg/encoding/json/" or "https://pkg.go.dev/encoding/json"	
+	Marshal : https://play.golang.org/p/imMlS23wbsp
+	
+	JSON represents 4 primitive types(strings, number, boolean and null) and 2 structured types
+	
+	JSON to Go:
+		* https://mholt.github.io/json-to-go/
+		
+	JSON UnMarshal:
+		* https://play.golang.org/p/Ulj0UqpVkrg
+		
+	JSON omitempty example:
+		* https://play.golang.org/p/XxRU1qPxeSw
+		
+	Sorting:
+		* sort.Ints and sort.Strings refer "https://golang.org/pkg/sort/"
+		* Example : https://play.golang.org/p/ESjkf_Ikiet
+		* Custom Sort : https://play.golang.org/p/9K2Of68TI3m -- very important for referral
+		* bcrypt : https://play.golang.org/p/L_alNkAmr6h
+			* Run the above in the VS Code
+			
+	Hands-on Exercises :
+		1. https://play.golang.org/p/IfxYTbAG3XD //Marshal
+		2. https://play.golang.org/p/2y5aEOQ4E1C //Marshal and Unmarshal
+		3. Json Encoder : https://play.golang.org/p/lbvRy9sQdmm //writing to os.stdout
+			* writing to a file : https://play.golang.org/p/HIgKUiYwpUN //execute it in VS code
+		4. https://play.golang.org/p/qOB_3TX78ll
+			* Sort the users by age and last name
+	
+	############################################################################################################################
+	
+Concurrency [package "sync"]
+	Concurrency vs Parallelism
+		* More than one cpu core enables parallelism
+		* Concurrency is a kind of Design Pattern which helps code run almost in parallel
+		
+	code to check platform where Go is running
+		* https://play.golang.org/p/DjpM9xPbAFH
+		
+	Waitgroup : refer golang.org/sync
+		* https://play.golang.org/p/7H97yFmoRjN //A must watch
+		
+	Method Sets Revisited :
+		* When the receiver of a method is a pointer then only a pointer can be used to access that method
+			-> func (wg *WaitGroup) Add()
+			
+		* Visit highlighted text at "golang.org method sets" specification
+			-> Imp Line: The method set of the corresponding pointer type *T is the set of all methods declared with receiver *T or T 
+			
+		* The method set of a type determines the interfaces that the type implements and the methods that can be called using a receiver of that type.	For example : The method sets "Less, Len, Swap" are necessary to implement the interface "sort"
+		
+		* Non pointer receiver works with both Pointers and Non-Pointers
+		* Pointer receiver works only with Pointers
+		
+		* A method is a function associated wih a named type
+		
+	Go Routines:
+		* If you want to return from a function (like an integer), don't add it to a goroutine as the return value will be discarded
+		
+	Race Condition:
+	---------------
+		* Race Condition : https://play.golang.org/p/_DTWc5XNKUp
+		* Read more about "runtime.Gosched"
+			* https://stackoverflow.com/questions/13107958/what-exactly-does-runtime-gosched-do
+		* How to know if there is a race condition in code? go run -race "prog.go"
+		* What is race condition in go?
+			* How to solve this race condition using "Mutex"
+			
+		* RWMutex : Read Write Mutex; Lock for reading and writing
+		
+		* Mutex : https://play.golang.org/p/S3KfZ0162kp
+		* Atomic : Using the same thing that Mutex is doing
+			* Read again
+			
+	Hands-on Exercises:
+	-------------------
+		1. https://play.golang.org/p/4GoX7ono3IK; Also run this and check the error shown "https://play.golang.org/p/XwBeYAvdTd9"
+		2. https://play.golang.org/p/80UVjRTk-IJ
+		3. https://play.golang.org/p/d6MuHbzcJR_B
+			* Run in VS Code with -race flag
+			* Run with and without "mutex"
+			
+		4. Even with "mutex", race condition is present due to println,
+			* https://play.golang.org/p/I3_24gWx1RN
+			
+		5. Atomic [read it well before trying] //Avoiding race condition using Atomic
+		6. Printing OS, ARCH, CPUs, GOROUTINES info [Try it everyday]
+		7. Try it this week [recording something you have learnt]
+		
+	
+	############################################################################################################################
+	
+Channels in goLang:
+	* Channels block!!! Channels block!!! Channels block!!! Channels block!!!
+	* The value of an uninitialized channel is nil
+	
+	* channel basic : https://play.golang.org/p/td7E3w1fIZG
+	* Check out the error here : https://play.golang.org/p/TrEGDNTAqD5
+	* check this for bidirectional channels : https://play.golang.org/p/t3lpTWRH50P
+	* you don't always need waitgroup to wait on channels
+		* https://play.golang.org/p/6-JPyqGOYvB
+		
+	4. Ranging over channel and closing the channel
+		* Should a channel be closed always? 
+		* https://play.golang.org/p/dVSKzTNa-yt //comment and uncomment the lines of code for more idea
+	
+	5. Select channels
+		* https://play.golang.org/p/yHU0WI17vHo //remove the closing of the channels and try the code; also race condition
+		
+	6. closing a channel and checking if it is closed
+		* https://play.golang.org/p/YF6wlKyDbZn
+		
+	7. Fan in and Fan out
+		* Fan out : https://play.golang.org/p/gh6eyQbLBKs //A must read
+		
+	8. Context
+		* refer : https://blog.golang.org/context //A must refer
+		* Background : Background is the root of any Context tree; it is never canceled:
+		* https://play.golang.org/p/Ttl8UI6N2PQ
+		* Another example : https://play.golang.org/p/30nE7KvVMRX
+		
+	Hands-on:
+		1. https://play.golang.org/p/G8KbuXLsVeP
+		2. Trying to receive a value from send only channel
+		3. https://play.golang.org/p/NgjSOAdZAnU
+		4. https://play.golang.org/p/npKlTXFaA3o
+		5. https://play.golang.org/p/xffV0y2-uZj //comma, ok idiom
+		6. https://play.golang.org/p/8QwOzpFggn9
+		7. https://play.golang.org/p/db0AjbUGZzS
+	
+	############################################################################################################################
+	
+Error Handling
+	* https://blog.golang.org/error-handling-and-go // For reference 
+	* Also refer : https://pkg.go.dev/errors#example-New
+	* Using New keyword for error : https://play.golang.org/p/vym_KRh60BX
+	
+	Checking Errors:
+	----------------
+		* How to get input from "stdin" and throw errors if there are any : https://play.golang.org/p/jaS23lGsw2E
+			-> Run the program and give input as "space separated names"
+			
+		* log.Println() //we can write the logs to a file too
+		* log.Fatalln() //you have to exit using os.Exit()
+		* log.Panicln() //panics and defers the functions from running
+		
+		* know about log.Setoutput()
+		* https://play.golang.org/p/Ttj045Rvbbs //Run in VS code
+		
+	Recover and Panic : https://blog.golang.org/defer-panic-and-recover
+	Recover:
+	--------
+		* Important : Recover is only useful inside deferred functions
+		* How defer works : https://play.golang.org/p/rZGa9ow2JsD
+		* Defer executes the statements in LIFO manner : https://play.golang.org/p/xIdV9u1kCMy
+		* Defer and return statement : https://play.golang.org/p/UoqoYTIVwSa
+		
+	Panic:
+	------
+		* https://play.golang.org/p/CZwCZ1cTKf0
+		* Important : When the function F calls panic, execution of F stops, any deferred functions in F are executed normally, and then F returns to its caller
+		
+	Errors with info:
+	-----------------
+		* https://play.golang.org/p/5ysaiz_WXvK
+		* Errorf : errors.New(Sprintf("format specifer", string))
+			-> https://play.golang.org/p/Wmb_dxjTXAE
+		* Implementing my own error interface
+			-> https://play.golang.org/p/l_pFtEgrDxL
+			-> https://play.golang.org/p/l1zH0jqz0eo [refer both]
+			
+	Hands-on:
+	---------
+		1. https://play.golang.org/p/8ThJPUIU9bj
+		2. https://play.golang.org/p/8JGO_RMtWth //use both fmt.Errorf and errors.New(fmt.Sprintf(""))
+		3. https://play.golang.org/p/QA4QqfnIf9z and https://play.golang.org/p/UTWWcwyK_ob //The second is the most important
+		4. https://play.golang.org/p/_e2XOCb38fR
+		5. Try it yourself
+		
+		
+	Documentation in Go:
+	--------------------
+		* go doc <pkg>
+		* go doc <pkg.method> mymath.Sum
+		* go doc fmt.Println
+		
+	
+	############################################################################################################################
+	
+	Testing in Go:
+	--------------
+		* Format of function : func TestXxx(*testing.T)
+		* file name format : <filename>_test.go
+		* func BenchmarkXxx(*testing.B) ; "with -bench" flag
+		
+		* Know about "golint and govet"
+		
+	BenchMarking:
+	-------------
+		* To measure the performance of the code
+		* Runs the code "N" number of times and it lets us know the performance
+		* Benchmark code format
+			BenchmarkGreet(t *testing.B){ ... }
+		* How to run benchmark 
+			go test -bench <dir name>
+	
+	############################################################################################################################
+
+Recap:
+	Functions:
+	----------
+		* Callbacks : https://play.golang.org/p/moHpOnWlmff
+		
+	Recap Exercises:
+	----------------
+		* How to convert interface{} to int?
+			if v.(int) > greatest {
+			where "v" is the interface
+			
+	func callbacks:
+	---------------
+		-> Passing a function as an argument is called callback in golang
+			* https://play.golang.org/p/6SVqZ054OSj
+			* https://play.golang.org/p/qtXJABqtf92
+			
+	Slices:
+	-------
+		-> The string is a slice and slice operations can be applied on string
+		-> A slice is pointing to an underlying array
+		-> Three types of slice initialization:
+			1. No capacity : slice := []myslice
+			2. with cap using make : slice := make([]int, 40, 100)
+			3. with cap using new : ([100]int)[0:50] ---> The capacity of the array is 100 and the number of elements is 50
+		
+		-> How the capacity of a slice increases?
+			refer : https://play.golang.org/p/P9HNFt7na-E
+				-> In the same code, during initialization, try to assign len of slice as other value instead of "0"
+			
+		-> How to append to a slice : append(<slice>, value)
+		-> Appending a slice to a slice : append(<slice1>, <slice2>...) Use 3 dots
+		
+		-> The best way to make slice is by using make()
+		
+		-> Slice has 3 elements : Pointer to an underlying array, length and capacity
+			-> Slice is referencing another DS which is array
+			-> Value of an uninitialized slice is "nil"
+			
+		-> slices are dynamic, and slices can be multi-dimensional
+		
+		-> literal and uninitialized
+			mySlice := []string{}
+			var mySlice []string Practice this and readFull
+			
+	Maps in goLang:
+	---------------
+		-> A map is a reference to the dat a st ruc ture cre ate d by make . When a map is passed to a function, the function receives a copy of the reference, so any changes the cal le d func tion makes to the underly ing dat a st ruc ture will be visible through the caller’s map reference too
+		-> refer "/home/hari/golib/src/deadpoet/The_Go_Prog_Language/Exercises/chapter2/DuplicateinFiles.go"
+		
+		-> The value od uninitialized map is "nil"
+		-> maps, structs and slices are reference types
+		
+		-> How to delete a key "k2" from a map "m"?
+			-> delete(m, "k2")
+		
+		-> https://play.golang.org/p/3VGX9Q2eZIV
+		
+		-> Also refer : https://www.golang-book.com/books/intro/6
+		-> In a map, it's key can't be a "function, another map or a slice", because quality checks like "==", "!=" can't be performed on them
+		
+		-> "comma, ok" is idiom is used to check if a value is present in a map or not
+		
+	Set in goLang:
+	--------------
+		-> A set can be implemented as a Map with type "bool"
+		
+	Hash Tables:
+	------------
+		-> 
+		
+	############################################################################################################################
+	
+Files in goLang:
+	* https://medium.com/rungo/working-with-files-and-file-system-a-low-level-introduction-825ea3bac5f9
+	* Refer udemy_new/files/my_file.go and test_file.go to know how to create a file and read from a file
+	
+	* Methods of reading a file : https://www.educative.io/edpresso/file-reading-in-golang	
+	
+	* For opening and closing of files, refer : https://golangbyexample.com/append-file-golang/
+	
+	############################################################################################################################
+	
+Strings in goLang
+	* How to join two strings?
+		-> strings.join([]string{"str1", "str2"}, <string sep>)
+	
+	############################################################################################################################	
+	
+Time in goLang:
+---------------
+	* current time : time.Now()
+	* elapsed time : time.Since(start).Seconds()
+	
+
+
+Info : It is a bad practice to create alias of types like,
+	type foo int
+	var y foo
+	
+Namd types vs anonymous types in goLang
+	Refer "HouseKeeping" video under "structs section
+	
+	############################################################################################################################
+	
+Errors and solutions:
+	-> package-xxx-is-not-in-goroot-when-building-golang-project
+		soln: I have removed go.mod in all my folders of GOROOT and did "go env -w GO111MODULE=off", and it has worked
+		link: https://stackoverflow.com/questions/61845013/package-xxx-is-not-in-goroot-when-building-golang-project
+
+Refer Will Kennedy's blog
+
+
