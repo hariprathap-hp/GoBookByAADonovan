@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	resp, err := http.Get("https://golang.org")
+	resp, err := http.Get("https://espncricinfo.com")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "http Get failed with error %v\n", err)
 		os.Exit(1)

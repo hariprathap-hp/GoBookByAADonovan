@@ -1,0 +1,38 @@
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"golang.org/x/net/html"
+)
+
+var mapping = map[string]string{"a": "href", "img": "src", "script": "src", "link": "href"}
+
+func main() {
+	node, node_err := html.Parse(os.Stdin)
+	if node_err != nil {
+		fmt.Println(node_err)
+	}
+
+	/*for _, v := range outline(nil, node) {
+		fmt.Println(v)
+	}*/
+
+	fmt.Println(outline("script", nil, node))
+}
+
+func outline(target string, s []string, node *html.Node) []string {
+	if node.Type == html.ElementNode && node.Data == target {
+		for _, v := range node.Attr {
+			if v.Key == mapping[target] {
+				s = append(s, v.Val)
+			}
+		}
+	}
+
+	for c := node.FirstChild; c != nil; c = c.NextSibling {
+		s = outline(target, s, c)
+	}
+	return s
+}

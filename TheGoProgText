@@ -30,6 +30,12 @@ maximum float64 - "math.MaxFloat64" -- provides 15 digits of precision
 
 	**************************************************************************************************************************
 	
+Secton 5 - Functions
+--------------------
+	* Exercise solutions : https://xingdl2007.gitbooks.io/gopl-soljutions/content/chapter-5-functions.html?q=
+
+	**************************************************************************************************************************
+	
 Section 6 - Methods
 -------------------
 	Do we have objects in Go? YES
