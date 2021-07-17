@@ -1,0 +1,15 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func add1(r rune) rune {
+	return r + 1
+}
+
+func main() {
+	mp := strings.Map(add1, "HARI")
+	fmt.Println(mp)
+}

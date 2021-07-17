@@ -1,0 +1,55 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	"golang.org/x/net/html"
+)
+
+const (
+	url = "https://espncricinfo.com"
+)
+
+func main() {
+	//first fetch the url using http.Get
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("HTTP GET failed for url %s with error %v\n", url, err)
+		return
+	}
+
+	//now the parse the html response
+	node, node_err := html.Parse(resp.Body)
+	//close the response body
+	resp.Body.Close()
+
+	if node_err != nil {
+		fmt.Printf("HTML parsing failed with error %v\n", node_err)
+	}
+
+	//call the function where the links are fetched
+	result := visit(nil, node)
+	fmt.Println(result)
+}
+
+func visit(s []string, node *html.Node) []string {
+	if node.Type == html.ElementNode && node.Data == "a" {
+		s = fetchLinks(s, node)
+	}
+
+	for c := node.FirstChild; c != nil; c = c.NextSibling {
+		s = visit(s, c)
+	}
+	return s
+}
+
+func fetchLinks(s []string, n *html.Node) []string {
+	//apply your logic here
+	for _, v := range n.Attr {
+		if v.Key == "href" {
+			s = append(s, v.Val)
+		}
+	}
+	return s
+}

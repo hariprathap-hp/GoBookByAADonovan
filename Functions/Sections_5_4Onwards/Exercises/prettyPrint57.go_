@@ -1,0 +1,99 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"net/http"
+	"os"
+	"strings"
+
+	"golang.org/x/net/html"
+)
+
+const (
+	url = "https://espncricinfo.com"
+)
+
+var depth = 0
+var pretty *os.File
+
+func main() {
+	//first fetch the url using http.Get
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("HTTP GET failed for url %s with error %v\n", url, err)
+		return
+	}
+
+	//now the parse the html response
+	node, node_err := html.Parse(resp.Body)
+	//close the response body
+	resp.Body.Close()
+
+	if node_err != nil {
+		fmt.Printf("HTML parsing failed with error %v\n", node_err)
+	}
+
+	pretty, _ = os.Create("pretty.txt")
+	visit(node, firstChild, secondChild)
+}
+
+func visit(node *html.Node, fc, sc func(*html.Node)) {
+
+	if fc != nil {
+		fc(node)
+	}
+
+	for c := node.FirstChild; c != nil; c = c.NextSibling {
+		visit(c, firstChild, secondChild)
+	}
+
+	if sc != nil {
+		sc(node)
+	}
+
+}
+
+func firstChild(fn *html.Node) {
+	if fn.Type == html.TextNode || fn.Type == html.CommentNode {
+		if !(fn.Parent.Type == html.ElementNode &&
+			(fn.Parent.Data == "script" || fn.Parent.Data == "style")) {
+			reader := strings.NewReader(fn.Data)
+			scanner := bufio.NewScanner(reader)
+			scanner.Split(bufio.ScanLines)
+			for scanner.Scan() {
+				line := scanner.Text()
+				pretty.WriteString(fmt.Sprintf("%*s%s\n", depth*2, "", line))
+			}
+		}
+	} else if fn.Type == html.ElementNode {
+		var attribute string
+		for _, attr := range fn.Attr {
+			attribute += fmt.Sprintf("%s=%q ", attr.Key, attr.Val)
+		}
+
+		child := ""
+		// <div /> is illegal
+		if fn.Data == "img" && fn.FirstChild == nil {
+			child = " /"
+		}
+
+		if len(attribute) > 1 {
+			attribute = attribute[:len(attribute)-1]
+			pretty.WriteString(fmt.Sprintf("%*s<%s %s%s>\n", depth*2, "", fn.Data, attribute, child))
+		} else {
+			pretty.WriteString(fmt.Sprintf("%*s<%s%s>\n", depth*2, "", fn.Data, child))
+		}
+		depth++
+	}
+}
+
+func secondChild(sn *html.Node) {
+	if sn.Type == html.ElementNode {
+		depth--
+		// <div /> is illegal
+		if !(sn.Data == "img" && sn.FirstChild == nil) {
+			pretty.WriteString(fmt.Sprintf("%*s</%s>\n", depth*2, "", sn.Data))
+		}
+	}
+}
