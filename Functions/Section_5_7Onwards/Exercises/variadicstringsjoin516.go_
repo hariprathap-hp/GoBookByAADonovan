@@ -1,0 +1,21 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	result := join("Hari", "Prathap", "Balaguru")
+	fmt.Println(result)
+}
+
+func join(strs ...string) string {
+	//res := []string{}
+	//res = append(res, strs...)
+	var b strings.Builder
+	for _, s := range strs {
+		b.WriteString(s)
+	}
+	return b.String()
+}

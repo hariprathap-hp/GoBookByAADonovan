@@ -1,0 +1,34 @@
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+func main() {
+	max, min := max_min(90, 91, 3, 2, 45, 32, 123, 5, 22, 21)
+	fmt.Printf("Maximum value is %d, and the Minimum value is %d\n", max, min)
+	cmax, cmin := conditional_max_min(135, 90, 91, 3, 2, 45, 32, 123, 5, 22, 21)
+	fmt.Printf("Conditional maximum value is %d, and the Minimum value is %d\n", cmax, cmin)
+}
+
+func max_min(vals ...int) (int, int) {
+	if len(vals) == 0 {
+		return 0, 0
+	}
+	sort.Ints(vals)
+	max := vals[len(vals)-1]
+	min := vals[0]
+	return max, min
+}
+
+func conditional_max_min(i int, vals ...int) (int, int) {
+	if len(vals) == 0 {
+		return i, i
+	}
+	vals = append(vals, i)
+	sort.Ints(vals)
+	max := vals[len(vals)-1]
+	min := vals[0]
+	return max, min
+}

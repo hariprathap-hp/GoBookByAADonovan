@@ -1,0 +1,68 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
+
+	"golang.org/x/net/html"
+)
+
+func main() {
+	url := "https://espncricinfo.com"
+	crawl(url)
+}
+
+func crawl(url string) {
+	//get the url
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	node, _ := html.Parse(resp.Body)
+	defer resp.Body.Close()
+
+	fmt.Println("browse")
+	browse(nil, node, resp)
+	/*for _, link := range links {
+		fmt.Println(link)
+	}*/
+}
+
+func browse(links []string, n *html.Node, resp *http.Response) []string {
+	if n.Type == html.ElementNode && n.Data == "a" {
+		for _, v := range n.Attr {
+			if v.Key != "href" {
+				continue
+			}
+			link, _ := resp.Request.URL.Parse(v.Val)
+			//if strings.HasSuffix(link.String(), "golang.org") {
+			if strings.Contains(link.String(), "espncricinfo.com") {
+				link_str := link.String()
+				link_slice := strings.Split(link_str, "//")
+				os.MkdirAll(link_slice[1], 0777)
+				getFilename(link_str)
+				//fmt.Println(filename)
+				links = append(links, link.String())
+				u, _ := url.Parse(link.String())
+				rs := strings.Replace(u.Host, "www.", "", 1)
+				fmt.Println(link, ",", u.Host, ",", u.Path, ",", rs)
+
+			}
+		}
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		links = browse(links, c, resp)
+	}
+	return links
+}
+
+func getFilename(s string) string {
+	files := strings.Split(s, "/")
+	file := files[len(files)-1]
+	return file
+}
