@@ -33,6 +33,29 @@ maximum float64 - "math.MaxFloat64" -- provides 15 digits of precision
 Secton 5 - Functions
 --------------------
 	* Exercise solutions : https://xingdl2007.gitbooks.io/gopl-soljutions/content/chapter-5-functions.html?q=
+	
+5.4 Errors:
+	* io.EOF is not an error, but an end of file indication
+	
+5.5 Function Values
+	* Function can be assigned to any variable
+		func square(n int) {return n*n}
+		f := square
+		
+	* How the above function value can be used?
+		* Can be called like f(3)
+		* Can be passed as a value to another function
+		
+	* Passing it to another function like
+		* strings.Map(f, "HARI")
+		* find here : https://play.golang.org/p/7cf7GxmKIEL
+		
+5.6 Anonymous Functions:
+	* Function values are not comparable
+	* Function values are implemented using techniques called closures
+	
+5.16
+	strings.Builder is the efficient way to concatenate strings
 
 	**************************************************************************************************************************
 	
