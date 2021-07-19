@@ -1,0 +1,17 @@
+package main
+
+import (
+	"TheGoProgLangBook/Functions/Sections_5_4Onwards/links"
+	"fmt"
+)
+
+func main() {
+	url := "https://espncricinfo.com"
+	links, err := links.Extract(url)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, v := range links {
+		fmt.Println(v)
+	}
+}

@@ -1,0 +1,67 @@
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+var prereqs = map[string][]string{
+	"algorithms": {"data structures"},
+	"calculus":   {"data structures", "linear algebra"},
+	"compilers": {
+		"data structures",
+		"formal languages",
+		"computer organization",
+	},
+	"data structures":       {"discrete math"},
+	"databases":             {"data structures"},
+	"discrete math":         {"intro to programming"},
+	"formal languages":      {"discrete math"},
+	"networks":              {"operating systems"},
+	"operating systems":     {"data structures", "computer organization"},
+	"programming languages": {"data structures", "computer organization"},
+	"linear algebra":        {"calculus"},
+}
+
+func main() {
+	for i, course := range topoSort(prereqs) {
+		fmt.Println(i, course)
+	}
+}
+
+func topoSort(m map[string][]string) []string {
+	var seen = map[string]bool{}
+	var visitAll func([]string) error
+	var topo []string
+	var parent = map[string]bool{}
+
+	visitAll = func(items []string) error {
+		for _, item := range items {
+			//first check if the parent of the item is already visited
+			if parent[item] {
+				fmt.Printf("%s", item)
+				return fmt.Errorf("%s", item)
+			}
+
+			if !seen[item] {
+				parent[item] = true
+				seen[item] = true
+				if err := visitAll(m[item]); err != nil {
+					fmt.Printf("%s -> %s", item, err)
+					return fmt.Errorf("%s -> %s", item, err)
+				}
+				parent[item] = false
+				topo = append(topo, item)
+			}
+		}
+		return nil
+	}
+
+	var keys []string
+	for item := range m {
+		keys = append(keys, item)
+	}
+	sort.Strings(keys)
+	visitAll(keys)
+	return topo
+}
