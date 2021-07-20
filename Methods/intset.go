@@ -20,7 +20,7 @@ func (s *IntSet) Add(x int) {
 		s.Words = append(s.Words, 0)
 	}
 	s.Words[word] |= 1 << bit
-}
+	}
 
 func (s *IntSet) UnionWith(t *IntSet) {
 	for i, tword := range t.Words {
