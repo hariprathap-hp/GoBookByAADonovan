@@ -152,6 +152,25 @@ func (s *IntSet) SymmetricDifferenceWith(t *IntSet) {
 	}
 }
 
+func (i *IntSet) Elems() []uint {
+	result := []uint{}
+	if len(i.words) == 0 {
+		return nil
+	}
+
+	for _, word := range i.words {
+		if word == 0 {
+			continue
+		}
+		for j := 0; j < 64; j++ {
+			if word&(1<<j) != 0 {
+				result = append(result, uint(j))
+			}
+		}
+	}
+	return result
+}
+
 func main() {
 	var x IntSet
 	x.Add(34)
@@ -181,4 +200,8 @@ func main() {
 	fmt.Println("r1 Difference with r2", r1.String())
 	//r1.SymmetricDifferenceWith(&r2)
 	//fmt.Println("r1 Symmteric Difference with r2", r1.String())
+
+	var ele IntSet
+	ele.AddAll(9, 8, 7, 6, 5, 4, 3, 2, 1)
+	fmt.Println("Elements are", ele.Elems())
 }
