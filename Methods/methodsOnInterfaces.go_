@@ -1,0 +1,18 @@
+package main
+
+import "fmt"
+
+type hari int
+
+func (h hari) sum(i ...int) int {
+	s := 0
+	for _, num := range i {
+		s += num
+	}
+	return s
+}
+
+func main() {
+	var h hari
+	fmt.Println(h.sum(1, 2, 3, 4, 5, 6))
+}

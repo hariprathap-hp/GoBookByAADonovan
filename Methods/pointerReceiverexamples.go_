@@ -1,0 +1,33 @@
+package main
+
+import (
+	"fmt"
+)
+
+type Point struct {
+	X float64
+	Y float64
+}
+
+func (p *Point) ScaleBy(n float64) {
+	p.X *= n
+	p.Y *= n
+}
+
+func main() {
+	p := Point{1.0, 2.0}
+	ptr := &p
+	//what are the wayswe can call the pointer reeiver function
+
+	p.ScaleBy(3) //This is also right as the Point type is automatically converted to Pointer receiver type
+	(&p).ScaleBy(2)
+	ptr.ScaleBy(4)
+	r := &Point{4, 5}
+	r.ScaleBy(5)
+
+	//Point{4, 5}.ScaleBy(4) This is error as Point{4,5} can't be addressed
+
+	fmt.Println(p.X, p.Y)
+	fmt.Println(r.X, r.Y)
+	
+}

@@ -1,0 +1,54 @@
+package main
+
+import (
+	"fmt"
+	"image/color"
+)
+
+type BC int
+
+type Point struct {
+	X float64
+	Y float64
+}
+
+func (bc *BC) ScaleBy(f float64) {
+	fmt.Println("BC")
+}
+
+type ColoredPoint struct {
+	BC
+	Point
+	color.RGBA
+}
+
+func (p *Point) Print() {
+	fmt.Println(p.X, p.Y)
+}
+
+func (p *Point) ScaleBy(f float64) {
+	p.X *= f
+	p.Y *= f
+	fmt.Println("Just P", p.X, p.Y)
+}
+
+/*func (p *ColoredPoint) ScaleBy(factor float64) {
+	p.X *= factor
+	p.Y *= factor
+
+	fmt.Println("CP", p.X, p.Y)
+}*/
+
+/*func (cp *ColoredPoint) print() {
+	fmt.Println("CP X and Y are", cp.P.X, cp.P.Y)
+}*/
+
+func main() {
+	/*var x BC = 3
+	var p = ColoredPoint{
+		x,
+		Point{1, 2},
+		color.RGBA{255, 0, 0, 255},
+	}*/
+	//	p.ScaleBy(4)
+}

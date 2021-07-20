@@ -1,0 +1,27 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"strings"
+
+	"golang.org/x/net/html"
+)
+
+func main() {
+	resp, r_err := http.Get("https://golang.org/doc/gopher/frontpage.png")
+	if r_err != nil {
+		fmt.Println(r_err)
+	}
+
+	defer resp.Body.Close()
+	if strings.Contains(resp.Header.Get("Content-Type"), "html") {
+		fmt.Println("Content-Type is HTML")
+		_, n_err := html.Parse(resp.Body)
+		if n_err != nil {
+			fmt.Println(n_err)
+		}
+	} else {
+		fmt.Println("Header not html")
+	}
+}

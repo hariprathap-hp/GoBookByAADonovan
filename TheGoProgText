@@ -56,11 +56,24 @@ Secton 5 - Functions
 	
 5.16
 	strings.Builder is the efficient way to concatenate strings
-
-	**************************************************************************************************************************
 	
-Section 6 - Methods
--------------------
+5.8 
+	Defer function calls
+		* defer functions are executed in the reverse order they are called
+		* The right place for the defer statement?
+			* Immediately after ther resources are allotted
+			
+	Opening a file for writing
+		* If a file is created to write contents, file close should be checked for any errors because write operations doesn't report any errors until the file is closed
+		
+5.9 : What happens when program program panics?
+	* During a typical panic, normal execution stops, all deferred function calls in that goroutine are executed, and the program crashes with a log message
+	
+	##########################	Panic unfinished	############################
+	
+Chapter 6:- METHODS
+	Two OOPS principles are discussed : Encapsulation and Composition
+
 	Do we have objects in Go? YES
 		-> Object is simply a value or variables that has methods
 		-> A method is a function associated with a particular type
@@ -71,23 +84,70 @@ Section 6 - Methods
 			Y int
 		}
 	
-		-> Now can we have a method for the type Point with the same name as that of the variable(for example, X?)
-		-> No, because the methods and variables share the same namespace
+		-> Now, can we have a method for the type Point with the same name as that of the variable(for example, X?)
+			-> No, because the methods and variables share the same namespace
+	
+	Error : Invalid receiver type : Pointer or an interface
+		* Methods can't be defind for an interface or a pointer
+		* refer : https://play.golang.org/p/c-rq46Dwx-Y
 		
+		-> Method declaration are not permitted on types which are pointers themselves
+			-> type P *int
+			-> func (P) f() //compiler error
+		
+			
 Section 6.2
 -----------
 	-> In realistic program, if any method of any type has a pointer receiver, all the methods of that type should have pointer receiver
 	-> But the rule can be broken
 	
-	-> Method declaration are not permitted on types which are pointers themselves
-	-> type P *int
-		-> func (P) f() //compiler error
-		
 	For normal and pointer receiver examples, check the link : https://play.golang.org/p/t3xyJGKGrLH
 	
-	3 Confusing cases:
-		1. 
+	Why do we generally use pointers to pass values to a function?
+		* Passing an argument generally means copying the whole value. If the value is huge, copying is tedious and its better to avoid copying
+		* To avoid this copying, simply we can pass the address of that variable
+	
+
+	Convention:
+	-----------
+		* If there is a type "P int" and if the type has method with a pointer receiver, then all the methods of that type should have a pointer receiver even if they strictly don't need it
 		
+	Receiver Argument and Receiver Parameter:
+		* Receiver Argument :
+			* The argument that is calling the function like p.ScaleBY
+			
+		* Receiver Parameter : 
+			* It is the parameter that is received at the function like func (p *Point)
+			
+	Three Conditions:
+	-----------------
+		1. Receiver Argument and Receiver Parameter are of same types
+		2. The receiver argument is a variable of type T and the receiver parameter has type *T . The compiler implicitly takes the address of the variable
+		3. Or the receiver argument has type *T and the receiver parameter has type T . The compiler implicitly dereferences the receiver, in other words, loads the value
+		
+	Embedded types:
+	---------------
+		type Point struct{ X, Y float64 }
+		type ColoredPoint struct {
+			Point
+			Color color.RGBA
+		}
+		
+		func (p *point) shape()
+		
+		var cp ColoredPoint
+			-> cp.shape()
+			
+		Though colouredpoint has no method named shape, it can call type "point's" method as Point is embedded inside ColoredPoint
+			-> In this case, the point type will be promoted to ColoredPoint
+			
+	What is an ambiguous selection while using embedded types?
+		-> When two types of the same rank have same methods, and when a call to one such method is made, it causes ambiguity
+		-> Refer : https://play.golang.org/p/dNkTMYM1fby
+		
+	Can methods be named on unnamed types?
+		[name types means type bc int, here bc is a naed type]
+			
 	**************************************************************************************************************************
 
 Section 7 : Interfaces
