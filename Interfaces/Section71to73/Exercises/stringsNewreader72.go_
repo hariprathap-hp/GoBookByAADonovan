@@ -1,0 +1,85 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"strings"
+
+	"golang.org/x/net/html"
+)
+
+type stringReader struct {
+	s string
+}
+
+func (r *stringReader) Read(p []byte) (n int, err error) {
+	n = copy(p, r.s)
+	r.s = r.s[n:]
+	if len(r.s) == 0 {
+		err = io.EOF // Must set EOF, otherwise it does not end
+	}
+	return
+}
+
+func NewReader(s string) io.Reader {
+	return &stringReader{s}
+}
+
+func main() {
+	url := "https://thehindu.com/"
+
+	resp, r_err := http.Get(url)
+	if r_err != nil {
+		err := fmt.Errorf("HTTP Get failed with error %v for the url %s", r_err, url)
+		fmt.Println(err)
+		return
+	}
+
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	nReader := NewReader(string(bytes))
+	//fmt.Printf("%v\n", nReader)
+	/*n, _ := html.ParseFragment(nReader, &html.Node{
+		Type:     html.ElementNode,
+		Data:     "body",
+		DataAtom: atom.Body,
+	})*/
+
+	node, _ := html.Parse(nReader)
+	//resp.Body.Close()
+
+	links := []string{}
+	//for _, node := range n {
+	links = visitAll(links, node)
+	//}
+	for _, v := range links {
+		fmt.Println(resp.Request.URL.Parse(v))
+	}
+}
+
+func visitAll(links []string, node *html.Node) []string {
+	if node.Type == html.ElementNode && node.Data == "a" {
+		for _, v := range node.Attr {
+			links = append(links, v.Val)
+		}
+	}
+
+	for c := node.FirstChild; c != nil; c = c.NextSibling {
+		links = visitAll(links, c)
+	}
+	return links
+}
+
+func getNewReader(resp *http.Response) *strings.Reader {
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	//fmt.Println(string(bytes))
+	nReader := strings.NewReader(string(bytes))
+	return nReader
+}

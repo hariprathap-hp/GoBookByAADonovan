@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"os"
+)
+
+type Mywriter struct {
+	IO  io.Writer
+	Ptr int64
+}
+
+func (cw *Mywriter) Write(p []byte) (int, error) {
+	n, err := cw.IO.Write(p)
+	if err != nil {
+		fmt.Println("Error--", err)
+	}
+	cw.Ptr += int64(n)
+	return n, err
+}
+
+func CountingWriter(w io.Writer) (io.Writer, *int64) {
+	//counting writer returns a new Writer that wraps the writer "w" and the number of bytes writtern to it
+	retWriter := Mywriter{
+		IO:  w,
+		Ptr: 0,
+	}
+	return &retWriter, &retWriter.Ptr
+
+}
+
+func main() {
+	fd, err := os.Create("/home/hari/golib/src/deadpoet/The_Go_Prog_Language/h_file")
+	if err != nil {
+		fmt.Println(err)
+	}
+	//call the function counting writer with a writer
+	writer, count := CountingWriter(fd)
+	fmt.Printf("%T\n", writer)
+	fmt.Fprint(writer, "Hello World!!\n	")
+	fmt.Println(*count)
+}
