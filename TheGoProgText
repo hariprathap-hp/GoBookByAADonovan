@@ -147,6 +147,14 @@ Section 6.2
 		
 	Can methods be named on unnamed types?
 		[name types means type bc int, here bc is a naed type]
+		
+Exercise 6.5:
+-------------
+	Yet to do
+	
+Encapsulation:
+	* Unit of encapsulation is package in GoLang
+	* Also, encapsulation is implemented by "capitalization" of the fields/methods		
 			
 	**************************************************************************************************************************
 
