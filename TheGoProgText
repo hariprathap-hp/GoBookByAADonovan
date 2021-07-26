@@ -160,6 +160,58 @@ Encapsulation:
 
 Section 7 : Interfaces
 ----------------------
+	Methods to satisfy flag.Value interface: Set and String methods
+
+	7.3 : Interface Satisfaction
+		* In the interface has methods, we can do nothing on the value it holds
+		* It is like only a class object can access the function inside class to access the class variables
+		* To overcome this, we can use "type assertions"
+		
+	Custom flag arguments:
+		-> https://gist.github.com/svett/53a288bd5250b4d443ef
+		
+	Interface Comparison:
+		-> Only compare interface values if you are certain that they contain dynamic values of comparable types
+		-> If the inteface value contains incomparable types like "slices", then comparison will crash
+		
 	
+7.6: Sorting
+-------------
+	* The methods needed to implement the sort interface
+		* len()
+		* swap()
+		* Less() //To compare the elements
+		
+		
+Goroutines and Channels
+------------------------
+	8.1 Goroutines
+		* Called by the keyword Go
+		
+	How a goRoutine stops?
+		* Other than by returning from main or exiting the program, there is no programmatic way for one goroutine to stop another
+		* There are other ways to communicate with a goRoutine to request that to stop iself
 	
+	defer inside an infinite loop will never run!!!
+		for {
+			... program ...
+			defer x.close()
+		    }
+	
+	8.4 Channels
+	-------------
+		* Message sent over channels are called as events
+		* When a channel is mainly used for synchronisation purpose and not used to send any event info, we can use struct{}
+		
+	8.3
+	---
+		-> How to use DialTCP function: https://golang.hotexamples.com/examples/net/-/DialTCP/golang-dialtcp-function-examples.html
+		
+		
+	Can we close a receive only channel? No, it causes compile time error
+	
+	Unbound Parallelism:
+		-> Unbound Parallelism is very bad as the system resources like number of CPUs, processors are limited
+		
+	Channel type of struct{} has size 0
 	**************************************************************************************************************************

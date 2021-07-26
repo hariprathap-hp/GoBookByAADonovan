@@ -1,4 +1,4 @@
-package	 links
+package links
 
 import (
 	"fmt"
@@ -23,20 +23,22 @@ func Extract(url string) ([]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parsing %s as HTML: %v", url, err)
 	}
+
 	var links []string
 	visitNode := func(n *html.Node) {
 		if n.Type == html.ElementNode && n.Data == "a" {
 			for _, a := range n.Attr {
 				if a.Key != "href" {
-					fmt.Println(a.Val)
+					//fmt.Println(a.Val)
 					continue
 				}
 				link, err := resp.Request.URL.Parse(a.Val)
+				fmt.Println(link)
 				if err != nil {
 					continue // ignore bad URLs
 				}
 				links = append(links, link.String())
-				fmt.Println(links)
+				//fmt.Println(links)
 			}
 		}
 	}

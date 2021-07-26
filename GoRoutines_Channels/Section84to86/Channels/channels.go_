@@ -1,0 +1,23 @@
+package main
+
+import "fmt"
+
+func main() {
+	//create a channel
+	c := make(chan int)
+	go squ(c)
+	for {
+		x := <-c
+		if x == 0 {
+			break
+		}
+		fmt.Println(x)
+	}
+}
+
+func squ(c chan int) {
+	for i := 1; i <= 10; i++ {
+		c <- i * i
+	}
+	close(c)
+}

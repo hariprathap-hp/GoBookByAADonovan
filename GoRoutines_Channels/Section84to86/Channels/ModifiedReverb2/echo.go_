@@ -1,0 +1,57 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"net"
+	"strings"
+	"sync"
+	"time"
+)
+
+func main() {
+	list, l_err := net.Listen("tcp", "localhost:8000")
+	if l_err != nil {
+		fmt.Println(l_err)
+	}
+
+	for {
+		conn, c_err := list.Accept()
+		if c_err != nil {
+			log.Println(c_err)
+			continue
+		}
+		go handleConn(conn.(*net.TCPConn))
+	}
+}
+
+func handleConn(c *net.TCPConn) {
+	defer c.CloseWrite()
+
+	var wg sync.WaitGroup
+
+	func() {
+		defer c.CloseRead()
+		input := bufio.NewScanner(c)
+		for input.Scan() {
+			wg.Add(1)
+			go func(s string) {
+				defer wg.Done()
+				echo(c, s, 3*time.Second)
+			}(input.Text())
+		}
+	}()
+	fmt.Println("Waiting")
+	wg.Wait()
+	fmt.Println("Done Waiting")
+}
+
+func echo(c net.Conn, txt string, delay time.Duration) {
+	fmt.Fprintf(c, "NetCat -- \t%s\n", strings.ToUpper(txt))
+	time.Sleep(delay)
+	fmt.Fprintf(c, "NetCat -- \t%s\n", txt)
+	time.Sleep(delay)
+	fmt.Fprintf(c, "NetCat -- \t%s\n", strings.ToLower(txt))
+	time.Sleep(delay)
+}

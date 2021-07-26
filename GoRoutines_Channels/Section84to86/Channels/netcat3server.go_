@@ -1,0 +1,47 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"strings"
+	"time"
+)
+
+func main() {
+	//create a listener
+	listener, err := net.Listen("tcp", "localhost:8000")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Listener created")
+	//accept all incoming connections in a loop
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+
+		go handleConn(conn)
+	}
+}
+
+func handleConn(c net.Conn) {
+	scaner := bufio.NewScanner(c)
+	for scaner.Scan() {
+		text := scaner.Text()
+		go echo(c, text)
+	}
+	c.Close()
+}
+
+func echo(c net.Conn, text string) {
+	fmt.Println("\t", strings.ToUpper(text))
+	time.Sleep(3 * time.Second)
+	fmt.Println("\t", text)
+	time.Sleep(3 * time.Second)
+	fmt.Println("\t", strings.ToLower(text))
+	time.Sleep(3 * time.Second)
+}

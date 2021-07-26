@@ -1,0 +1,43 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"io"
+	"log"
+	"net"
+	"os"
+	"strings"
+	"sync"
+)
+
+var wg sync.WaitGroup
+
+func main() {
+	for _, v := range os.Args[1:] {
+		s := strings.Split(v, "=")[1]
+		tz := strings.Split(v, "=")[0]
+		conn, err := net.Dial("tcp", s)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer conn.Close()
+		wg.Add(1)
+		go mustCopy(os.Stdout, conn, tz)
+	}
+	//why wg.Wait here and not inside the for loop? Because the for loop won't proceed aftr the first iteration if wg.wait is given inside
+	wg.Wait()
+	//time.Sleep(1 * time.Minute)
+}
+
+func mustCopy(w io.Writer, r net.Conn, tz string) {
+	defer wg.Done()
+	s := bufio.NewScanner(r)
+	for s.Scan() {
+		fmt.Fprintf(w, "%s : %s\n", tz, s.Text())
+	}
+	//fmt.Println(c.name, "done")
+	if s.Err() != nil {
+		log.Printf("can't read from  %s : %s", tz, s.Err())
+	}
+}
