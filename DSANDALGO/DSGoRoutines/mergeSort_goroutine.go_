@@ -1,0 +1,63 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+//var res []int
+
+func main() {
+	//create a slice that needs to be sorted using merge sort
+	var arr = []int{39, 33, 27, 10}
+	fmt.Println("Before SOrting")
+	print(arr)
+	//res = make([]int, len(arr))
+	start := time.Now()
+	res := mergeSort(arr)
+	fmt.Printf("%d\n", time.After(time.Duration(start.Second())))
+	fmt.Println("After Sorting")
+	print(res)
+}
+
+func print(a []int) {
+	for i, v := range a {
+		fmt.Println(i, v)
+	}
+}
+
+func mergeSort(items []int) []int {
+	var first []int
+	if len(items) < 2 {
+		return items
+	}
+	done := make(chan struct{})
+	go func() {
+		first = mergeSort(items[:len(items)/2])
+		done <- struct{}{}
+	}()
+	second := mergeSort(items[len(items)/2:])
+	<-done
+	return merge(first, second)
+}
+func merge(a []int, b []int) []int {
+	final := []int{}
+	i := 0
+	j := 0
+	for i < len(a) && j < len(b) {
+		if a[i] < b[j] {
+			final = append(final, a[i])
+			i++
+		} else {
+			final = append(final, b[j])
+			j++
+		}
+	}
+	for ; i < len(a); i++ {
+		final = append(final, a[i])
+	}
+	for ; j < len(b); j++ {
+		final = append(final, b[j])
+	}
+	return final
+}

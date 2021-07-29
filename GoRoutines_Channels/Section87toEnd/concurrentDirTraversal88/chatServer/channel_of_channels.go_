@@ -1,0 +1,41 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+type client chan<- string
+
+var (
+	messages = make(chan string)
+	clients  = make(map[client]bool)
+)
+
+func main() {
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		readMessages()
+	}()
+	go func() {
+		wg.Wait()
+	}()
+	//time.Sleep(1 * time.Second)
+Loop:
+	for {
+		select {
+		case msg := <-messages:
+			fmt.Println(msg)
+			break Loop
+		default:
+			fmt.Println("Default")
+		}
+	}
+}
+
+func readMessages() {
+	str := "I am STR"
+	messages <- str
+}

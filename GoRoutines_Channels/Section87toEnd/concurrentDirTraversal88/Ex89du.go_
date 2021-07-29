@@ -1,0 +1,108 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"io/fs"
+	"io/ioutil"
+	"path/filepath"
+	"sync"
+	"time"
+)
+
+var verbose = flag.Bool("v", false, "If enabled, periodic update of size will be provided")
+
+type fileinfo struct {
+	root   string
+	r_size int64
+}
+
+func main() {
+	sizes := make(chan fileinfo)
+	var wg sync.WaitGroup
+
+	flag.Parse()
+	roots := flag.Args()
+	if len(roots) == 0 {
+		roots = []string{"."}
+	}
+
+	//fmt.Println(roots)
+	for _, root := range roots {
+		wg.Add(1)
+		go func(root string) {
+			walkdir(root, root, &wg, sizes)
+		}(root)
+	}
+
+	go func() {
+		wg.Wait()
+		close(sizes)
+	}()
+
+	var tick <-chan time.Time
+	if *verbose {
+		tick = time.Tick(1 * time.Second)
+	}
+	var nfiles, nbytes int64
+	var rootCount = make(map[string]int64)
+	var rootSize = make(map[string]int64)
+
+Loop:
+	for {
+		select {
+		case size, ok := <-sizes:
+			if !ok {
+				break Loop
+			}
+			nfiles++
+			nbytes += size.r_size
+			rootCount[size.root] += 1
+			rootSize[size.root] += size.r_size
+
+		case <-tick:
+			printRootUsages(roots, rootCount, rootSize)
+		}
+	}
+	printDiskUsage(nfiles, nbytes)
+}
+
+func printRootUsages(roots []string, rootCounts, rootSizes map[string]int64) {
+	for _, root := range roots {
+		fmt.Printf("%s -> ", root)
+		printDiskUsage(rootCounts[root], rootSizes[root])
+	}
+}
+
+func printDiskUsage(nfiles, nbytes int64) {
+	fmt.Printf("%d files %.1f GB\n", nfiles, float64(nbytes)/1e9)
+}
+
+func walkdir(root, dir string, wg *sync.WaitGroup, sizes chan<- fileinfo) {
+	defer wg.Done()
+	//fmt.Println(dir)
+	for _, entry := range directoryEntries(dir) {
+		if entry.IsDir() {
+			wg.Add(1)
+			subdir := filepath.Join(dir, entry.Name())
+			go walkdir(root, subdir, wg, sizes)
+		} else {
+			sizes <- fileinfo{root, entry.Size()}
+		}
+	}
+}
+
+var sema = make(chan struct{}, 20)
+
+func directoryEntries(dir string) []fs.FileInfo {
+	sema <- struct{}{}
+	defer func() {
+		//fmt.Println("Read from Sema")
+		<-sema
+	}()
+	fileinfo, err := ioutil.ReadDir(dir)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return fileinfo
+}

@@ -1,0 +1,33 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	abort := make(chan int, 1)
+	fmt.Println("Commencing countdown. Press \"0\" to abort.")
+	go func() {
+		var i int
+		fmt.Scanf("%d", &i)
+		abort <- i
+	}()
+	for countdown := 10; countdown > 0; countdown-- {
+		select {
+		case <-time.After(1 * time.Second):
+			//fmt.Println("Rocket Launced at :", x)
+		// Do nothing.
+		case x := <-abort:
+			if x == 0 {
+				fmt.Println("Launch aborted!")
+				return
+			}
+		}
+	}
+	launch()
+}
+
+func launch() {
+	fmt.Println("Rocket Launched")
+}

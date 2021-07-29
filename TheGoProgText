@@ -213,5 +213,17 @@ Goroutines and Channels
 	Unbound Parallelism:
 		-> Unbound Parallelism is very bad as the system resources like number of CPUs, processors are limited
 		
+	8.7
+	---
+		Select Statement:
+			-> A Select with no statement loops forever
+		
 	Channel type of struct{} has size 0
 	**************************************************************************************************************************
+	
+Concurrency and shared variables:
+---------------------------------
+What is a data race?
+	We’ll repeat the definition, since it is so important: A data race occurs whenever two goroutines access the same variable concurrently and at least one of the accesses is a write. It follows from this definition that there are three ways to avoid a data race
+	
+
