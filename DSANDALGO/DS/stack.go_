@@ -1,0 +1,46 @@
+package main
+
+import "fmt"
+
+var (
+	stack = []int{}
+)
+
+func main() {
+	push(5)
+	push(6)
+	push(7)
+	push(8)
+	fmt.Println("The current stack is -- ", stack)
+	fmt.Println("Popping -- ", pop())
+	push(9)
+	push(19)
+	push(10)
+	push(37)
+	fmt.Println("stack before removal ", stack)
+	remove(7)
+	fmt.Println("Stack after removal -- ", stack)
+}
+
+func push(a int) {
+	stack = append(stack, a)
+}
+
+func remove(a int) {
+	for i, v := range stack {
+		if v == a {
+			stack = append(stack[:i], stack[i+1:]...)
+		}
+	}
+}
+
+func pop() int {
+	l := len(stack) - 1
+	elem := stack[l]
+	stack = stack[:l]
+	return elem
+}
+
+func top() {
+	fmt.Println(stack[0])
+}

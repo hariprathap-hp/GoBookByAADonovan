@@ -1,0 +1,29 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+var (
+	quit = make(chan struct{})
+)
+
+func main() {
+	go func() {
+		fmt.Println("Inside new goroutine")
+
+	Loop:
+		for {
+			select {
+			case <-quit:
+				break Loop
+			default:
+				fmt.Println("Not quit yet")
+			}
+		}
+	}()
+
+	time.Sleep(5000000 * time.Nanosecond)
+	quit <- struct{}{}
+}

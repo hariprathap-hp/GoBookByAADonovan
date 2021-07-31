@@ -15,7 +15,7 @@ func main() {
 	//res = make([]int, len(arr))
 	start := time.Now()
 	res := mergeSort(arr)
-	fmt.Printf("%d\n", time.After(time.Duration(start.Second())))
+	fmt.Printf("%f\n", time.Since(start).Seconds())
 	fmt.Println("After Sorting")
 	print(res)
 }

@@ -1,0 +1,26 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	//var s string
+	//fmt.Println("enter your string here - ")
+	//fmt.Scanf("%s\n", &s)
+	start := time.Now()
+	permutation([]rune("cabin"), 0, 4)
+	fmt.Println(time.Since(start).Seconds())
+}
+
+func permutation(a []rune, l, r int) {
+	if l == r {
+		fmt.Println(string(a))
+	}
+	for i := l; i <= r; i++ {
+		a[i], a[l] = a[l], a[i]
+		permutation(a, l+1, r)
+		a[i], a[l] = a[l], a[i]
+	}
+}

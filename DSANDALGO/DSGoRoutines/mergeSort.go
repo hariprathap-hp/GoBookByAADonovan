@@ -15,7 +15,7 @@ func main() {
 	//res = make([]int, len(arr))
 	start := time.Now()
 	res := mergeSort(arr)
-	fmt.Printf("%d\n", time.After(time.Duration(start.Second())))
+	fmt.Printf("%f\n", time.Since(start).Seconds())
 	fmt.Println("After Sorting")
 	print(res)
 }
@@ -41,7 +41,7 @@ func merge(a []int, b []int) []int {
 	i := 0
 	j := 0
 	for i < len(a) && j < len(b) {
-		if a[i] <	 b[j] {
+		if a[i] < b[j] {
 			final = append(final, a[i])
 			i++
 		} else {
@@ -57,4 +57,3 @@ func merge(a []int, b []int) []int {
 	}
 	return final
 }
-		
