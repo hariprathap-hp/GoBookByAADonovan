@@ -219,6 +219,19 @@ Goroutines and Channels
 			-> A Select with no statement loops forever
 		
 	Channel type of struct{} has size 0
+	
+Section stopped at 9.4
+
+	**************************************************************************************************************************
+
+Packages and the Go Tool
+------------------------
+	* How to rename an import?
+		import (
+			"crypto/rand"
+			mrand "math/rand" // alternative name mrand avoids conflict
+		)
+
 	**************************************************************************************************************************
 	
 Concurrency and shared variables:
