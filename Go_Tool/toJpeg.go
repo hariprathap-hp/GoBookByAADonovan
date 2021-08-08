@@ -15,6 +15,7 @@ var im = flag.String("image", "jpeg", "enter your required output image type")
 var myimg string
 
 func main() {
+	//links.Extract("hari")
 	flag.Parse()
 	myimg = *im
 	str := "i.jpeg"

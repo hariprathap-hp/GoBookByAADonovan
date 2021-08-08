@@ -1,0 +1,63 @@
+Golang interview questions:
+How to get input from stdin using golang
+	-> https://tutorialedge.net/golang/reading-console-input-golang/
+	-> Using bufio.NewReader, bufio.NewScanner, fmt.Scanln
+	
+What is shadowing in goLang?
+	-> https://medium.com/@Nidhi11594/variable-shadowing-in-golang-f500e8e58931
+	
+How to detect shadow variables?
+	-> using "-vet"
+	-> https://yourbasic.org/golang/gotcha-shadowing-variables/
+	
+How to call a C code from goLang?
+	-> Using "CGO"
+	
+Pointer Questions:
+---------------------------
+	How to declare a slice of pointers in golang?
+		-> var row []*int64
+		
+	Like C and C++, we can use the keyword "new" in golang
+		-> Refer : https://medium.com/learning-the-go-programming-language/pointing-to-go-the-go-pointer-type-a3c3f587592f#:~:text=variables%20valPtr%20and%20countPtr%20are,to%20elements%20to%20type%20int64.
+		
+			*******************************************************************************************************************************************************************************
+		
+Server Questions:
+--------------------------
+	Usually in go, you use http.ListenAndServe to create a server. What if you want to create a server with more capabilities?
+		-> Use the server struct like http.Server {}
+
+	How to make our golang server use https?
+		-> Use ListenAndServeTLS
+		
+	How Handlerfunc works? btw, handler func is used in http.HandleFunc(pattern, HandlerFunc)
+		-> Go has a function type named HandlerFunc , which will adapt a function f with the appropriate signature into a Handler with a method f
+	
+What is chaining in goLang?
+	-> Can we chain Handlers? Refer GoWebProgramming book chapter 3.3.4
+	
+What are some important parts of http Requests?
+	-> URL, Header, Body, "Form, PostForm, MultipartPostForm"
+	
+When you submit a form in html along with query in url with a method of "POST", which is given the priority?
+	-> The value submitted in form is given priority
+
+Refer PostForm and MultipartForm in the book for more info
+
+Which enctype is used to upload files?
+	-> multipart/form-data
+	
+How to get json data from html form?
+	-> Using json decoder or json unmarshall
+	
+How to redirect a request to another page by sending few parameters as well?	
+	-> https://stackoverflow.com/questions/61970551/golang-gin-redirect-and-render-a-template-with-new-variables
+	
+Redirect not working in Gin
+	-> https://github.com/gin-gonic/gin/issues/1630
+	
+			*******************************************************************************************************************************************************************************
+
+Question links 1:
+	-> https://www.educative.io/blog/50-golang-interview-questions#concurrency

@@ -1,0 +1,32 @@
+package main
+
+import "fmt"
+
+var mychannel = make(chan int)
+var quitchannel = make(chan int)
+
+func main() {
+	var num, sum int
+	fmt.Println("Enter the number of your choice -- ")
+	fmt.Scanf("%d", &num)
+	go func(n int) {
+		for i := 1; i <= num; i++ {
+			sum += <-mychannel
+		}
+		fmt.Println("Sum is -- ", sum)
+		quitchannel <- 0
+	}(num)
+	sumOfSquares(mychannel, quitchannel, num)
+}
+
+func sumOfSquares(m, q chan int, num int) {
+	i := 1
+	for {
+		select {
+		case m <- i * i:
+			i++
+		case <-q:
+			return
+		}
+	}
+}
